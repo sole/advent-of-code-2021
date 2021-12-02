@@ -5,6 +5,7 @@ let lines = utils.readLines('input.txt');
 let parsedMovements = parseMovements(lines);
 
 console.log(solvePart1(parsedMovements));
+console.log(solvePart2(parsedMovements));
 
 function solvePart1(movements) {
 
@@ -16,9 +17,29 @@ function solvePart1(movements) {
 		depth += move.y;
 	});
 
+	return (formatResult(horizontal, depth));
+
+}
+
+function solvePart2(movements) {
+	
+	let horizontal = 0;
+	let depth = 0;
+	let aim = 0;
+
+	movements.forEach(move => {
+		aim += move.y; // down increases the aim, up increases the aim
+		horizontal += move.x;
+		depth += aim * move.x;
+	});
+
+	return (formatResult(horizontal, depth));
+
+}
+
+function formatResult(horizontal, depth) {
 	let multiplied = horizontal * depth;
 	return `horizontal: ${horizontal}, depth: ${depth}, multiplied: ${multiplied}`;
-
 }
 
 // Take an array of movements and convert them into relative coordinates
@@ -27,7 +48,7 @@ function parseMovements(lines) {
 }
 
 function parseMovement(movement) {
-	
+	// Not a very sophisticated parser but we don't really need more here I guess! No need for RegEx.
 	let [direction, units] = movement.split(' ');
 	let x = 0, y = 0;
 
