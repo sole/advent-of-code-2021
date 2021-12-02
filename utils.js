@@ -6,7 +6,12 @@ function readTextFile(fileName) {
 
 function readLines(fileName) {
 	let contents = readTextFile(fileName);
-	return contents.split('\n');
+	let filteredContents = contents
+		.split('\n')
+		.map(line => line.trim())
+		.filter(line => line.length > 0);
+
+	return filteredContents;
 }
 
 function readLinesAsNumbers(fileName) {
