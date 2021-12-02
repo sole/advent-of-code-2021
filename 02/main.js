@@ -1,6 +1,6 @@
 const utils = require('../utils.js');
 
-let lines = utils.readLines('example.txt');
+let lines = utils.readLines('input.txt');
 
 let parsedMovements = parseMovements(lines);
 
