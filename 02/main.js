@@ -4,17 +4,22 @@ let lines = utils.readLines('input.txt');
 
 let parsedMovements = parseMovements(lines);
 
-let horizontal = 0; // 'x'
-let depth = 0;      // 'y'
+console.log(solvePart1(parsedMovements));
 
-parsedMovements.forEach(move => {
-	horizontal += move.x;
-	depth += move.y;
-});
+function solvePart1(movements) {
 
-let multiplied = horizontal * depth;
+	let horizontal = 0; // 'x'
+	let depth = 0;      // 'y'
 
-console.log(`horizontal: ${horizontal}, depth: ${depth}, multiplied: ${multiplied}`);
+	movements.forEach(move => {
+		horizontal += move.x;
+		depth += move.y;
+	});
+
+	let multiplied = horizontal * depth;
+	return `horizontal: ${horizontal}, depth: ${depth}, multiplied: ${multiplied}`;
+
+}
 
 // Take an array of movements and convert them into relative coordinates
 function parseMovements(lines) {
