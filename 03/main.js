@@ -5,37 +5,10 @@ let lines = utils.readLines('input.txt');
 
 let maxNumberBits = findMaxLength(lines);
 let mostCommonBits = [];
-let trueCounts = [];
 
-for(let k = 0; k < maxNumberBits; k++) {
-	trueCounts[k] = 0;
+for(let i = 0; i < maxNumberBits; i++) {
+	mostCommonBits[i] = findMostCommonBitAtPosition(lines, i);
 }
-
-lines.forEach(line => {
-	for(let i = 0; i < maxNumberBits; i++) {
-		
-		// Not sure if the input has varied length, but check just in case
-		if(i >= line.length) {
-			break;
-		}
-		
-		// Otherwise the '0' string can be truthy below
-		let bit = Number(line[i]);
-		
-		if(bit) {
-			trueCounts[i]++;
-		}
-	}
-
-});
-
-mostCommonBits = trueCounts.map(e => {
-	if(e > lines.length / 2) {
-		return 1;
-	} else {
-		return 0;
-	}
-});
 
 let leastCommonBits = mostCommonBits.map(e => e == 1 ? 0 : 1);
 
@@ -44,9 +17,6 @@ let epsilon = binaryArrayToNumber(leastCommonBits);
 let powerConsumption = gamma * epsilon;
 
 console.log(`Part 1 - gamma: ${gamma}, epsilon: ${epsilon}, power consumption: ${powerConsumption}`);
-
-let oxigenGeneratorRating = 0;
-let carbonGeneratorRating = 0;
 
 let oxigenArray = lines.concat();
 let carbonArray = lines.concat();
@@ -69,8 +39,8 @@ for(let i = 0; i < maxNumberBits; i++) {
 	}
 }
 
-oxigenGeneratorRating = Number.parseInt(oxigenArray.pop(), 2);
-carbonGeneratorRating = Number.parseInt(carbonArray.pop(), 2);
+let oxigenGeneratorRating = Number.parseInt(oxigenArray.pop(), 2);
+let carbonGeneratorRating = Number.parseInt(carbonArray.pop(), 2);
 let lifeSupportRating = oxigenGeneratorRating * carbonGeneratorRating;
 
 console.log(`Part 2 - generator ratings - oxigen: ${oxigenGeneratorRating}, carbon: ${carbonGeneratorRating}, life support: ${lifeSupportRating}`);
