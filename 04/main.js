@@ -17,7 +17,6 @@ class Board {
 
 	markNumber(number) {
 		let coords = this.findNumber(number);
-		console.log(coords);
 		if(coords) {
 			let [x, y] = coords;
 			this.marked[x][y] = true;
@@ -50,7 +49,6 @@ class Board {
 			}
 			// Do we have a full row of marked numbers?
 			if(markedCount === marked.length) {
-				console.log('horizontal winner');
 				return true;
 			}
 		}
@@ -67,7 +65,6 @@ class Board {
 
 			// Do we have a full column of marked numbers?
 			if(markedCount === this.marked.length) {
-				console.log('vertical winner');
 				return true;
 			}
 		}
@@ -87,6 +84,14 @@ class Board {
 		});
 		return sum;
 	}
+
+	removeMarks() {
+		this.marked.forEach(row => {
+			row.forEach((_, index) => {
+				row[index] = false;
+			});
+		});
+	}
 	
 }
 
@@ -96,28 +101,64 @@ let input = utils.readTextFile('input.txt');
 
 let [drawnNumbers, boards] = parseInput(input);
 
-//console.log(drawnNumbers, boards);
-//process.exit(0);
+part1();
 
-for(let i = 0; i < drawnNumbers.length; i++) {
-	let number = drawnNumbers[i];
-	//console.log('drawing', number);
-	boards.forEach((board, index) => {
-		//console.log('Marking in board', index);
-		let res = board.markNumber(number);
-		//console.log('was in board', res);
-		if(board.isWinner()) {
-			console.log(`Board number ${index} is winner!`)
-			console.log(board);
-			let sumUnmarked = board.getSumOfUnmarked();
-			console.log(sumUnmarked);
-			let finalScore = sumUnmarked * number;
-			console.log('final', finalScore);
-			process.exit(0);
+boards.forEach(board => board.removeMarks());
+
+part2();
+
+function part1() {
+	for(let i = 0; i < drawnNumbers.length; i++) {
+		let number = drawnNumbers[i];
+		
+		for(let j = 0; j < boards.length; j++) {
+			let board = boards[j];
+			let res = board.markNumber(number);
+			if(board.isWinner()) {
+				showFinalScore(number, board);
+				let sumUnmarked = board.getSumOfUnmarked();
+				let finalScore = sumUnmarked * number;
+				return;
+			}
 		}
-	});
+	}
+}
+function part2() {
+
+	let activeBoards = boards.concat();
+	let numbers = drawnNumbers.concat();
+	let lastBoard;
+
+	for(let i = 0; i < numbers.length; i++) {
+		let number = numbers[i];
+		
+		for(let j = 0; j < activeBoards.length; j++) {
+			let board = activeBoards[j];
+			let inBoard = board.markNumber(number);
+
+			if(inBoard) {
+				if(board.isWinner()) {
+					lastBoard = board;
+				}
+			}
+		}
+
+		activeBoards = activeBoards.filter(b => !b.isWinner());
+
+		if(activeBoards.length === 0) {
+			showFinalScore(number, lastBoard);
+			break;
+		}
+	}
+	
 }
 
+function showFinalScore(number, board) {
+	let sumUnmarked = board.getSumOfUnmarked();
+	let finalScore = sumUnmarked * number;
+	console.log(`unmarked ${sumUnmarked}; final score = ${finalScore}`);
+
+}
 
 function parseInput(input) {
 	let chunks = input.split('\n\n');
@@ -130,17 +171,17 @@ function parseInput(input) {
 
 	boardsChunk.forEach(boardChunk => {
 		let board = new Board();
-		console.log('board --------------');
+		/*console.log('board --------------');
 		console.log('CHUNK');
-		console.log(boardChunk);
+		console.log(boardChunk);*/
 		
 		let boardLines = boardChunk.split('\n');
-		console.log(boardLines.length, 'lines');
+		//console.log(boardLines.length, 'lines');
 
 		// this is megAUgly
 		boardLines.forEach(line => {
 			let numbers = line.split(/(\d+)\s*/).filter(s => s.trim().length > 0);
-			console.log(numbers);
+			//console.log(numbers);
 			if(numbers.length > 0) {
 				numbers = numbers.map(s => Number(s));
 				board.addLine(numbers);
