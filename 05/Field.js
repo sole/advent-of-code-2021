@@ -124,6 +124,48 @@ module.exports = class Field {
 		});
 	}
 
+	considerDiagonal() {
+		let self = this;
+		
+		let lines = this.coordinates;
+
+		lines.forEach(line => {
+			let from = line.from;
+			let to = line.to;
+
+			let dx = to.x - from.x;
+			let dy = to.y - from.y;
+
+			let stepsX = Math.abs(dx);
+			let stepsY = Math.abs(dy);
+
+		
+			if(stepsX === stepsY) {
+
+				console.log('diagonal', line);
+	
+				let x0 = from.x; // Math.min(from.x, to.x);
+				let y0 = from.y; // Math.min(from.y, to.y);
+
+				let incX = dx / stepsX;
+				let incY = dy / stepsY;
+
+				let x = x0;
+				let y = y0;
+
+				console.log(`${x0} ${y0} inc ${incX} ${incY}`);
+
+				for(let i = 0; i <= stepsX; i++) {
+					let amount = self.getCoveredAmount(x, y);
+					self.setCoveredAmount(x, y, amount + 1);
+					x += incX;
+					y += incY;
+				}
+			}
+		});
+
+	}
+
 	getNumPointsWithOverlap() {
 		let overlapping = 0;
 		for(let i = 0; i < this.numX; i++) {

@@ -4,23 +4,23 @@ const Field = require('./Field.js');
 
 let input = utils.readLines(
 	//'example.txt'
-	'input.txt'
+	 'input.txt'
 );
 
 lineCoords = parseInput(input);
 
-console.log(lineCoords);
+let field = new Field(lineCoords);
+field.printDiagram();
+field.considerHorizontal();
+field.considerVertical();
+field.printDiagram();
+console.log('Overlapping = ', field.getNumPointsWithOverlap());
 
-part1(lineCoords);
+// I could see this coming, yes
+field.considerDiagonal();
+field.printDiagram();
 
-function part1(lineCoords) {
-	let field = new Field(lineCoords);
-	field.printDiagram();
-	field.considerHorizontal();
-	field.considerVertical();
-	field.printDiagram();
-	console.log('Overlapping = ', field.getNumPointsWithOverlap());
-}
+console.log('Overlapping = ', field.getNumPointsWithOverlap());
 
 function parseInput(lines) {
 	let vents = [];
